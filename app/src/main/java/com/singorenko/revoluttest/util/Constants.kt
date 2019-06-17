@@ -37,7 +37,7 @@ class Constants {
         const val usdShortName = "USD"
         const val zarShortName = "ZAR"
 
-        const val audLongName = "AUD"
+        const val audLongName = "Australian Dollar"
         const val bgnLongName = "BGN"
         const val brlLongName = "BRL"
         const val cadLongName = "CAD"
@@ -45,7 +45,7 @@ class Constants {
         const val cnyLongName = "CNY"
         const val czkLongName = "CZK"
         const val dkkLongName = "DKK"
-        const val gbpLongName = "GBP"
+        const val gbpLongName = "British Pound"
         const val hkdLongName = "HKD"
         const val hrkLongName = "HRK"
         const val hufLongName = "HUF"

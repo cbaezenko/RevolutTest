@@ -3,15 +3,16 @@ package com.singorenko.revoluttest.ui
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 import com.singorenko.revoluttest.R
 import com.singorenko.revoluttest.network.remote.utilities.ApiUtils
-import com.singorenko.revoluttest.ui.adapter.RecyclerViewAdapter
+import com.singorenko.revoluttest.ui.adapter.RecyclerViewRatesAdapter
 import com.singorenko.revoluttest.ui.helper.UIHelper
 import com.singorenko.revoluttest.ui.model.RateItem
 import com.singorenko.revoluttest.util.Constants
@@ -19,10 +20,10 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
-class ExchangeListFragment : Fragment() {
-
+class ListValuesFragment : Fragment() {
     private val TAG: String = "ExchangeListFragment"
     private var listRateItems: MutableList<RateItem>? = null
     private var disposable: Disposable? = null
@@ -30,12 +31,12 @@ class ExchangeListFragment : Fragment() {
     private var recyclerViewState: Parcelable? = null
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerViewAdapter: RecyclerViewAdapter
+    private lateinit var recyclerViewAdapter: RecyclerViewRatesAdapter
 
     private var disposableRequestData: Disposable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_exchange_list, container, false)
+        return inflater.inflate(R.layout.fragment_list_values, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,14 +44,15 @@ class ExchangeListFragment : Fragment() {
 
         Log.d(TAG, "show exchange list")
 
-        recyclerView = view.findViewById<View>(R.id.rv_exchange_list) as RecyclerView
-        val layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = layoutManager
-    }
+    recyclerView = view.findViewById<View>(R.id.rv_rate_list) as RecyclerView
+    val layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
+    recyclerView.setHasFixedSize(true)
+    recyclerView.layoutManager = layoutManager
+
+}
 
     private fun fillRecyclerView() {
-        recyclerViewAdapter = RecyclerViewAdapter(listRateItems)
+        recyclerViewAdapter = RecyclerViewRatesAdapter(listRateItems)
         recyclerView.adapter = recyclerViewAdapter
     }
 
@@ -61,7 +63,8 @@ class ExchangeListFragment : Fragment() {
 
         disposableRequestData = Observable.interval(1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()
+            .observeOn(
+                AndroidSchedulers.mainThread()
             ).subscribe { dataRequest() }
     }
 
@@ -100,7 +103,7 @@ class ExchangeListFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = ExchangeListFragment().apply {
+        fun newInstance() = ListValuesFragment().apply {
         }
     }
 }
