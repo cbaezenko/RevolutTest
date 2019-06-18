@@ -1,5 +1,7 @@
 package com.singorenko.revoluttest.ui.helper
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.singorenko.revoluttest.network.model.RatesModel
 import com.singorenko.revoluttest.ui.model.RateItem
 import com.singorenko.revoluttest.util.Constants
@@ -7,9 +9,27 @@ import com.singorenko.revoluttest.util.Constants
 class UIHelper {
 
     companion object {
+        private const val PREF_NAME_CURRENCY = "preferenceNameCurrency"
+        private const val PRIVATE_MODE = 0
 
-        fun fillListRareItems(ratesModel: RatesModel) : MutableList<RateItem>{
+        fun savePreferenceCurrency(currencyShortName: String, context: Context){
+            val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME_CURRENCY, PRIVATE_MODE)
+            val editor = sharedPref.edit()
+            editor.putString(PREF_NAME_CURRENCY, currencyShortName)
+            editor.apply()
+        }
+
+        private fun getPreferenceCurrency(context: Context) : String{
+            val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME_CURRENCY, PRIVATE_MODE)
+            val currency = sharedPref.getString(PREF_NAME_CURRENCY, Constants.usdShortName)
+            return currency
+        }
+
+        fun fillListRareItems(ratesModel: RatesModel, context: Context) : MutableList<RateItem>{
             val mutableList: MutableList<RateItem> = ArrayList()
+
+            mutableList.add(RateItem((getPreferenceCurrency(context)), ratesModel.USD))
+
             mutableList.add(RateItem((Constants.audShortName), ratesModel.AUD))
             mutableList.add(RateItem((Constants.bgnShortName), ratesModel.BGN))
             mutableList.add(RateItem((Constants.brlShortName), ratesModel.BRL))

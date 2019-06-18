@@ -21,11 +21,19 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class ExchangeListFragment : Fragment() {
+class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListener {
+    override fun onListItemClick(clickedItemIndex: Int, itemToMove: RateItem?) {
+        UIHelper.savePreferenceCurrency(this.listRateItems!![clickedItemIndex].currencyAbb, this.context!!)
+        listRateItems?.removeAt(clickedItemIndex)
+        if (itemToMove != null) {
+            listRateItems?.add(0, itemToMove)
+        }
+    }
 
     private val TAG: String = "ExchangeListFragment"
     private var listRateItems: MutableList<RateItem>? = null
     private var disposable: Disposable? = null
+    private lateinit var layoutManager: LinearLayoutManager
 
     private var recyclerViewState: Parcelable? = null
 
@@ -44,13 +52,13 @@ class ExchangeListFragment : Fragment() {
         Log.d(TAG, "show exchange list")
 
         recyclerView = view.findViewById<View>(R.id.rv_exchange_list) as RecyclerView
-        val layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
+        layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = layoutManager
     }
 
     private fun fillRecyclerView() {
-        recyclerViewAdapter = RecyclerViewAdapter(listRateItems)
+        recyclerViewAdapter = RecyclerViewAdapter(listRateItems, this)
         recyclerView.adapter = recyclerViewAdapter
     }
 
@@ -59,7 +67,7 @@ class ExchangeListFragment : Fragment() {
         //Restore recyclerView State
         (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
 
-        disposableRequestData = Observable.interval(1, TimeUnit.SECONDS)
+        disposableRequestData = Observable.interval(10, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()
             ).subscribe { dataRequest() }
@@ -75,7 +83,7 @@ class ExchangeListFragment : Fragment() {
             .subscribe(
                 { result ->
                     Log.d(TAG, "called successfully")
-                    listRateItems = UIHelper.fillListRareItems(result.rates)
+                    listRateItems = UIHelper.fillListRareItems(result.rates, this.context!!)
 
                     //Restore recyclerView State
                     (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
