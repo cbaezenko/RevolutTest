@@ -40,27 +40,27 @@ class UIHelper {
                 Constants.dkkShortName -> return R.drawable.flag_dk
                 Constants.eurShortName -> return R.drawable.flag_eu
                 Constants.gbpShortName -> return R.drawable.flag_gb
-                Constants.hkdShortName -> return R.drawable.navigation_empty_icon
-                Constants.hrkShortName -> return R.drawable.navigation_empty_icon
+                Constants.hkdShortName -> return R.drawable.flag_hk
+                Constants.hrkShortName -> return R.drawable.flag_hr
                 Constants.hufShortName -> return R.drawable.flag_hu
-                Constants.idrShortName -> return R.drawable.navigation_empty_icon
-                Constants.ilsShortName -> return R.drawable.navigation_empty_icon
-                Constants.inrShortName -> return R.drawable.navigation_empty_icon
+                Constants.idrShortName -> return R.drawable.flag_id
+                Constants.ilsShortName -> return R.drawable.flag_il
+                Constants.inrShortName -> return R.drawable.flag_in
                 Constants.iskShortName -> return R.drawable.flag_is
                 Constants.jpyShortName -> return R.drawable.flag_jp
-                Constants.krwShortName -> return R.drawable.navigation_empty_icon
-                Constants.mxnShortName -> return R.drawable.navigation_empty_icon
-                Constants.myrShortName -> return R.drawable.navigation_empty_icon
-                Constants.nokShortName -> return R.drawable.navigation_empty_icon
+                Constants.krwShortName -> return R.drawable.flag_sk
+                Constants.mxnShortName -> return R.drawable.flag_mx
+                Constants.myrShortName -> return R.drawable.flag_my
+                Constants.nokShortName -> return R.drawable.flag_no
                 Constants.nzdShortName -> return R.drawable.flag_nz
-                Constants.phpShortName -> return R.drawable.navigation_empty_icon
-                Constants.plnShortName -> return R.drawable.navigation_empty_icon
-                Constants.ronShortName -> return R.drawable.navigation_empty_icon
+                Constants.phpShortName -> return R.drawable.flag_ph
+                Constants.plnShortName -> return R.drawable.flag_pl
+                Constants.ronShortName -> return R.drawable.flag_ro
                 Constants.rubShortName -> return R.drawable.flag_ru
-                Constants.sekShortName -> return R.drawable.navigation_empty_icon
-                Constants.sgdShortName -> return R.drawable.navigation_empty_icon
-                Constants.thbShortName -> return R.drawable.navigation_empty_icon
-                Constants.tryShortName -> return R.drawable.navigation_empty_icon
+                Constants.sekShortName -> return R.drawable.flag_se
+                Constants.sgdShortName -> return R.drawable.flag_sg
+                Constants.thbShortName -> return R.drawable.flag_th
+                Constants.tryShortName -> return R.drawable.flag_tr
                 Constants.usdShortName -> return R.drawable.flag_us
                 Constants.zarShortName -> return R.drawable.flag_za
                 else -> return R.drawable.navigation_empty_icon
