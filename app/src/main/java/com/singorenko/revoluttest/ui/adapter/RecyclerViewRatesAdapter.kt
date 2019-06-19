@@ -1,5 +1,6 @@
 package com.singorenko.revoluttest.ui.adapter
 
+import android.content.Context
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +8,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.singorenko.revoluttest.R
 import com.singorenko.revoluttest.ui.helper.UIHelper
 import com.singorenko.revoluttest.ui.model.RateItem
 
-class RecyclerViewRatesAdapter(private var listRateItems: MutableList<RateItem>?) : RecyclerView.Adapter<RecyclerViewRatesAdapter.RecyclerViewHolder>() {
+class RecyclerViewRatesAdapter(private var listRateItems: MutableList<RateItem>?,
+                               private val context: Context?
+) : RecyclerView.Adapter<RecyclerViewRatesAdapter.RecyclerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val context = parent.context
@@ -32,6 +37,11 @@ class RecyclerViewRatesAdapter(private var listRateItems: MutableList<RateItem>?
         holder.tvCurrency.text = Editable.Factory.getInstance().newEditable((currency).toString())
         holder.tvMoneyDescription.text = UIHelper.getCurrencyLongName(moneyShortName)
         holder.tvMoneyShortName.text = moneyShortName
+
+        if (context != null) {
+            Glide.with(context).load(UIHelper.getFlagIcon(moneyShortName))
+                .apply(RequestOptions.circleCropTransform()).into(holder.ivMoneyImage)
+        }
     }
 
     inner class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

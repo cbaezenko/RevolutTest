@@ -56,7 +56,7 @@ class ListValuesFragment : Fragment() {
     }
 
     private fun fillRecyclerView() {
-        recyclerViewAdapter = RecyclerViewRatesAdapter(listRateItems)
+        recyclerViewAdapter = RecyclerViewRatesAdapter(listRateItems, context)
         recyclerView.adapter = recyclerViewAdapter
     }
 

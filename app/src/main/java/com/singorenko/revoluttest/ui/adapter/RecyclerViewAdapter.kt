@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.singorenko.revoluttest.R
 import com.singorenko.revoluttest.ui.helper.UIHelper
 import com.singorenko.revoluttest.ui.model.RateItem
@@ -34,6 +36,11 @@ class RecyclerViewAdapter(private var listRateItems: MutableList<RateItem>?,
         holder.tvCurrency.text = (currency * amount).toString()
         holder.tvMoneyDescription.text = UIHelper.getCurrencyLongName(moneyShortName)
         holder.tvMoneyShortName.text = moneyShortName
+
+        if (context != null) {
+            Glide.with(context).load(UIHelper.getFlagIcon(moneyShortName))
+                .apply(RequestOptions.circleCropTransform()).into(holder.ivMoneyImage)
+        }
     }
 
     inner class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{

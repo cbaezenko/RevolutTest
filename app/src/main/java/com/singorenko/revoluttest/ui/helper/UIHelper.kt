@@ -2,7 +2,11 @@ package com.singorenko.revoluttest.ui.helper
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.singorenko.revoluttest.R
 import com.singorenko.revoluttest.network.model.RatesModel
 import com.singorenko.revoluttest.ui.model.RateItem
 import com.singorenko.revoluttest.util.Constants
@@ -12,11 +16,55 @@ class UIHelper {
         private const val PREF_NAME_CURRENCY = "preferenceNameCurrency"
         private const val PRIVATE_MODE = 0
 
-        fun setPreferenceCurrency (context: Context?, tvMoneyDescription: TextView, tvMoneyShortName: TextView){
+        fun setPreferenceCurrency (context: Context?, tvMoneyDescription: TextView, tvMoneyShortName: TextView, ivFlag: ImageView){
             val moneyDescription = getCurrencyLongName(getPreferenceCurrency(context))
             val shortName = getPreferenceCurrency(context)
             tvMoneyDescription.text = moneyDescription
             tvMoneyShortName.text = shortName
+
+            if (context != null) {
+                Glide.with(context).load(getFlagIcon(shortName))
+                    .apply(RequestOptions.circleCropTransform()).into(ivFlag)
+            }
+        }
+
+        fun getFlagIcon(preferenceCurrency: String) : Int{
+            when(preferenceCurrency){
+                Constants.audShortName -> return R.drawable.flag_au
+                Constants.bgnShortName -> return R.drawable.flag_bg
+                Constants.brlShortName -> return R.drawable.flag_br
+                Constants.cadShortName -> return R.drawable.flag_ca
+                Constants.chfShortName -> return R.drawable.flag_ch
+                Constants.cnyShortName -> return R.drawable.flag_cn
+                Constants.czkShortName -> return R.drawable.flag_cz
+                Constants.dkkShortName -> return R.drawable.flag_dk
+                Constants.eurShortName -> return R.drawable.flag_eu
+                Constants.gbpShortName -> return R.drawable.flag_gb
+                Constants.hkdShortName -> return R.drawable.navigation_empty_icon
+                Constants.hrkShortName -> return R.drawable.navigation_empty_icon
+                Constants.hufShortName -> return R.drawable.flag_hu
+                Constants.idrShortName -> return R.drawable.navigation_empty_icon
+                Constants.ilsShortName -> return R.drawable.navigation_empty_icon
+                Constants.inrShortName -> return R.drawable.navigation_empty_icon
+                Constants.iskShortName -> return R.drawable.flag_is
+                Constants.jpyShortName -> return R.drawable.flag_jp
+                Constants.krwShortName -> return R.drawable.navigation_empty_icon
+                Constants.mxnShortName -> return R.drawable.navigation_empty_icon
+                Constants.myrShortName -> return R.drawable.navigation_empty_icon
+                Constants.nokShortName -> return R.drawable.navigation_empty_icon
+                Constants.nzdShortName -> return R.drawable.flag_nz
+                Constants.phpShortName -> return R.drawable.navigation_empty_icon
+                Constants.plnShortName -> return R.drawable.navigation_empty_icon
+                Constants.ronShortName -> return R.drawable.navigation_empty_icon
+                Constants.rubShortName -> return R.drawable.flag_ru
+                Constants.sekShortName -> return R.drawable.navigation_empty_icon
+                Constants.sgdShortName -> return R.drawable.navigation_empty_icon
+                Constants.thbShortName -> return R.drawable.navigation_empty_icon
+                Constants.tryShortName -> return R.drawable.navigation_empty_icon
+                Constants.usdShortName -> return R.drawable.flag_us
+                Constants.zarShortName -> return R.drawable.flag_za
+                else -> return R.drawable.navigation_empty_icon
+            }
         }
 
         fun savePreferenceCurrency(currencyShortName: String, context: Context){
@@ -34,8 +82,6 @@ class UIHelper {
 
         fun fillListRareItems(ratesModel: RatesModel) : MutableList<RateItem>{
             val mutableList: MutableList<RateItem> = ArrayList()
-
-//            mutableList.add(RateItem((getPreferenceCurrency(context)), ratesModel.USD))
 
             mutableList.add(RateItem((Constants.audShortName), ratesModel.AUD))
             mutableList.add(RateItem((Constants.bgnShortName), ratesModel.BGN))

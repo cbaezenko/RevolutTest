@@ -15,7 +15,6 @@ import com.singorenko.revoluttest.network.remote.utilities.ApiUtils
 import com.singorenko.revoluttest.ui.adapter.RecyclerViewAdapter
 import com.singorenko.revoluttest.ui.helper.UIHelper
 import com.singorenko.revoluttest.ui.model.RateItem
-import com.singorenko.revoluttest.util.Constants
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -28,7 +27,7 @@ import kotlinx.android.synthetic.main.item_value_exchange.*
 class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListener {
     override fun onListItemClick(clickedItemIndex: Int) {
         UIHelper.savePreferenceCurrency(this.listRateItems!![clickedItemIndex].currencyAbb, this.context!!)
-        UIHelper.setPreferenceCurrency(context, tv_money_description, tv_money_short_name)
+        UIHelper.setPreferenceCurrency(context, tv_money_description, tv_money_short_name, iv_money_image)
     }
 
     private val TAG: String = "ExchangeListFragment"
@@ -76,7 +75,7 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
     override fun onResume() {
         super.onResume()
 
-        UIHelper.setPreferenceCurrency(context, tv_money_description, tv_money_short_name)
+        UIHelper.setPreferenceCurrency(context, tv_money_description, tv_money_short_name, iv_money_image)
 
         //Restore recyclerView State
         (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
