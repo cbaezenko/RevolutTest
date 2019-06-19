@@ -25,10 +25,10 @@ class UIHelper {
             return currency
         }
 
-        fun fillListRareItems(ratesModel: RatesModel, context: Context) : MutableList<RateItem>{
+        fun fillListRareItems(ratesModel: RatesModel) : MutableList<RateItem>{
             val mutableList: MutableList<RateItem> = ArrayList()
 
-            mutableList.add(RateItem((getPreferenceCurrency(context)), ratesModel.USD))
+//            mutableList.add(RateItem((getPreferenceCurrency(context)), ratesModel.USD))
 
             mutableList.add(RateItem((Constants.audShortName), ratesModel.AUD))
             mutableList.add(RateItem((Constants.bgnShortName), ratesModel.BGN))

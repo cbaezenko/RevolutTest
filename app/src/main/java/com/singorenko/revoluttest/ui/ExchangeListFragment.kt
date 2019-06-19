@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
+import android.text.Editable
+import android.text.TextWatcher
+
+
 
 class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListener {
     override fun onListItemClick(clickedItemIndex: Int, itemToMove: RateItem?) {
@@ -42,6 +47,9 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
 
     private var disposableRequestData: Disposable? = null
 
+    private var amount: Float = 1.0F
+    private lateinit var etAmountValue: EditText
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_exchange_list, container, false)
     }
@@ -55,10 +63,13 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
         layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = layoutManager
+
+        etAmountValue = view.findViewById(R.id.et_currency)
+        etAmountValue.addTextChangedListener(mTextEditorWatcher)
     }
 
     private fun fillRecyclerView() {
-        recyclerViewAdapter = RecyclerViewAdapter(listRateItems, this)
+        recyclerViewAdapter = RecyclerViewAdapter(listRateItems, this,amount)
         recyclerView.adapter = recyclerViewAdapter
     }
 
@@ -66,6 +77,8 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
         super.onResume()
         //Restore recyclerView State
         (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
+
+        amount = (etAmountValue.editableText.toString().replace(',', '.')).toFloat()
 
         disposableRequestData = Observable.interval(10, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
@@ -83,7 +96,7 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
             .subscribe(
                 { result ->
                     Log.d(TAG, "called successfully")
-                    listRateItems = UIHelper.fillListRareItems(result.rates, this.context!!)
+                    listRateItems = UIHelper.fillListRareItems(result.rates)
 
                     //Restore recyclerView State
                     (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
@@ -110,5 +123,19 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
         @JvmStatic
         fun newInstance() = ExchangeListFragment().apply {
         }
+    }
+
+    private val mTextEditorWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            if(etAmountValue.editableText.toString().isNotEmpty()) {
+                amount = (etAmountValue.editableText.toString().replace(',', '.')).toFloat()
+                dataRequest()
+                recyclerViewAdapter.notifyDataSetChanged()
+            }
+        }
+
+        override fun afterTextChanged(s: Editable) {}
     }
 }

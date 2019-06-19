@@ -78,7 +78,7 @@ class ListValuesFragment : Fragment() {
             .subscribe(
                 { result ->
                     Log.d(TAG, "called successfully")
-                    listRateItems = UIHelper.fillListRareItems(result.rates, this.context!!)
+                    listRateItems = UIHelper.fillListRareItems(result.rates)
 
                     //Restore recyclerView State
                     (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
