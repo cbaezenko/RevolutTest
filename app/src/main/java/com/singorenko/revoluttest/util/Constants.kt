@@ -2,7 +2,7 @@ package com.singorenko.revoluttest.util
 
 class Constants {
     companion object{
-//        const val ratesQuantity = 31
+//        const val ratesQuantity = 32
 
        const val audShortName = "AUD"
         const val bgnShortName = "BGN"
@@ -12,6 +12,7 @@ class Constants {
         const val cnyShortName = "CNY"
         const val czkShortName = "CZK"
         const val dkkShortName = "DKK"
+        const val eurShortName = "EUR"
         const val gbpShortName = "GBP"
         const val hkdShortName = "HKD"
         const val hrkShortName = "HRK"
@@ -45,6 +46,7 @@ class Constants {
         const val cnyLongName = "CNY"
         const val czkLongName = "CZK"
         const val dkkLongName = "DKK"
+        const val eurLongName = "EUR"
         const val gbpLongName = "British Pound"
         const val hkdLongName = "HKD"
         const val hrkLongName = "HRK"

@@ -2,15 +2,22 @@ package com.singorenko.revoluttest.ui.helper
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.widget.TextView
 import com.singorenko.revoluttest.network.model.RatesModel
 import com.singorenko.revoluttest.ui.model.RateItem
 import com.singorenko.revoluttest.util.Constants
 
 class UIHelper {
-
     companion object {
         private const val PREF_NAME_CURRENCY = "preferenceNameCurrency"
         private const val PRIVATE_MODE = 0
+
+        fun setPreferenceCurrency (context: Context?, tvMoneyDescription: TextView, tvMoneyShortName: TextView){
+            val moneyDescription = getCurrencyLongName(getPreferenceCurrency(context))
+            val shortName = getPreferenceCurrency(context)
+            tvMoneyDescription.text = moneyDescription
+            tvMoneyShortName.text = shortName
+        }
 
         fun savePreferenceCurrency(currencyShortName: String, context: Context){
             val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME_CURRENCY, PRIVATE_MODE)
@@ -19,8 +26,8 @@ class UIHelper {
             editor.apply()
         }
 
-        private fun getPreferenceCurrency(context: Context) : String{
-            val sharedPref: SharedPreferences = context.getSharedPreferences(PREF_NAME_CURRENCY, PRIVATE_MODE)
+        fun getPreferenceCurrency(context: Context?) : String{
+            val sharedPref: SharedPreferences = context!!.getSharedPreferences(PREF_NAME_CURRENCY, PRIVATE_MODE)
             val currency = sharedPref.getString(PREF_NAME_CURRENCY, Constants.usdShortName)
             return currency
         }
@@ -38,6 +45,7 @@ class UIHelper {
             mutableList.add(RateItem((Constants.cnyShortName), ratesModel.CNY))
             mutableList.add(RateItem((Constants.czkShortName), ratesModel.CZK))
             mutableList.add(RateItem((Constants.dkkShortName), ratesModel.DKK))
+            mutableList.add(RateItem((Constants.eurShortName), ratesModel.EUR))
             mutableList.add(RateItem((Constants.gbpShortName), ratesModel.GBP))
             mutableList.add(RateItem((Constants.hkdShortName), ratesModel.HKD))
             mutableList.add(RateItem((Constants.hrkShortName), ratesModel.HRK))
@@ -75,6 +83,7 @@ class UIHelper {
                 Constants.cnyShortName -> Constants.cnyLongName
                 Constants.czkShortName -> Constants.czkLongName
                 Constants.dkkShortName -> Constants.dkkLongName
+                Constants.eurShortName -> Constants.eurLongName
                 Constants.gbpShortName -> Constants.gbpLongName
                 Constants.hkdShortName -> Constants.hkdLongName
                 Constants.hrkShortName -> Constants.hrkLongName

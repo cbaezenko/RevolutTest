@@ -23,16 +23,12 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import android.text.Editable
 import android.text.TextWatcher
-
-
+import kotlinx.android.synthetic.main.item_value_exchange.*
 
 class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListener {
-    override fun onListItemClick(clickedItemIndex: Int, itemToMove: RateItem?) {
+    override fun onListItemClick(clickedItemIndex: Int) {
         UIHelper.savePreferenceCurrency(this.listRateItems!![clickedItemIndex].currencyAbb, this.context!!)
-        listRateItems?.removeAt(clickedItemIndex)
-        if (itemToMove != null) {
-            listRateItems?.add(0, itemToMove)
-        }
+        UIHelper.setPreferenceCurrency(context, tv_money_description, tv_money_short_name)
     }
 
     private val TAG: String = "ExchangeListFragment"
@@ -50,12 +46,16 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
     private var amount: Float = 1.0F
     private lateinit var etAmountValue: EditText
 
+    private lateinit var currencySelected : String
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_exchange_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        currencySelected = UIHelper.getPreferenceCurrency(context)
 
         Log.d(TAG, "show exchange list")
 
@@ -69,12 +69,15 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
     }
 
     private fun fillRecyclerView() {
-        recyclerViewAdapter = RecyclerViewAdapter(listRateItems, this,amount)
+        recyclerViewAdapter = RecyclerViewAdapter(listRateItems, this, context, amount)
         recyclerView.adapter = recyclerViewAdapter
     }
 
     override fun onResume() {
         super.onResume()
+
+        UIHelper.setPreferenceCurrency(context, tv_money_description, tv_money_short_name)
+
         //Restore recyclerView State
         (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
 
@@ -89,8 +92,7 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
     private fun dataRequest (){
         //Save recyclerView State Position to avoid auto scroll up with each update from server
         recyclerViewState = (recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()
-
-        disposable = ApiUtils.getApiService().getRateList(Constants.usdShortName)
+        disposable = ApiUtils.getApiService().getRateList(currencySelected)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -121,8 +123,7 @@ class ExchangeListFragment : Fragment(), RecyclerViewAdapter.ListItemClickListen
 
     companion object {
         @JvmStatic
-        fun newInstance() = ExchangeListFragment().apply {
-        }
+        fun newInstance() = ExchangeListFragment().apply {}
     }
 
     private val mTextEditorWatcher = object : TextWatcher {

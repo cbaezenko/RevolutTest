@@ -9,6 +9,7 @@ class RatesModel(
     val CNY: Float,
     val CZK: Float,
     val DKK: Float,
+    val EUR: Float,
     val GBP: Float,
     val HKD: Float,
     val HRK: Float,

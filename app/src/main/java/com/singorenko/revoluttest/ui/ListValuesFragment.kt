@@ -20,7 +20,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class ListValuesFragment : Fragment() {
@@ -35,6 +34,9 @@ class ListValuesFragment : Fragment() {
 
     private var disposableRequestData: Disposable? = null
 
+    private lateinit var currencySelected : String
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list_values, container, false)
     }
@@ -42,14 +44,16 @@ class ListValuesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currencySelected = UIHelper.getPreferenceCurrency(context)
+
         Log.d(TAG, "show exchange list")
 
-    recyclerView = view.findViewById<View>(R.id.rv_rate_list) as RecyclerView
-    val layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
-    recyclerView.setHasFixedSize(true)
-    recyclerView.layoutManager = layoutManager
+        recyclerView = view.findViewById<View>(R.id.rv_rate_list) as RecyclerView
+        val layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = layoutManager
 
-}
+    }
 
     private fun fillRecyclerView() {
         recyclerViewAdapter = RecyclerViewRatesAdapter(listRateItems)
@@ -68,7 +72,7 @@ class ListValuesFragment : Fragment() {
             ).subscribe { dataRequest() }
     }
 
-    private fun dataRequest (){
+    private fun dataRequest() {
         //Save recyclerView State Position to avoid auto scroll up with each update from server
         recyclerViewState = (recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()
 
@@ -103,7 +107,6 @@ class ListValuesFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = ListValuesFragment().apply {
-        }
+        fun newInstance() = ListValuesFragment().apply {}
     }
 }
