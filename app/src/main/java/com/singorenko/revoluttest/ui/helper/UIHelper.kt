@@ -76,8 +76,7 @@ class UIHelper {
 
         fun getPreferenceCurrency(context: Context?) : String{
             val sharedPref: SharedPreferences = context!!.getSharedPreferences(PREF_NAME_CURRENCY, PRIVATE_MODE)
-            val currency = sharedPref.getString(PREF_NAME_CURRENCY, Constants.usdShortName)
-            return currency
+            return sharedPref.getString(PREF_NAME_CURRENCY, Constants.usdShortName)
         }
 
         fun fillListRareItems(ratesModel: RatesModel) : MutableList<RateItem>{

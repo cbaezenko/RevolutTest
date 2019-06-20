@@ -12,7 +12,8 @@
             android:id="@+id/iv_money_image" android:adjustViewBounds="true" android:layout_marginTop="16dp"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="16dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"/>
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"
+            android:contentDescription="Currency Image"/>
     <TextView
             android:textColor="@android:color/black"
             android:textSize="18sp"
@@ -38,7 +39,6 @@
             android:textAlignment="center"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
             android:text="99,79"
             android:ems="10"
             android:id="@+id/tv_currency"
