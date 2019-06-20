@@ -34,7 +34,7 @@ class RecyclerViewRatesAdapter(private var listRateItems: MutableList<RateItem>?
         val currency: Float = this.listRateItems?.get(position)?.currencyValue ?: 0.1F
         val moneyShortName : String = this.listRateItems?.get(position)?.currencyAbb ?: "EMPTY"
 
-        holder.tvCurrency.text = Editable.Factory.getInstance().newEditable((currency).toString())
+        holder.tvCurrency.text = String.format("%.2f",(currency))
         holder.tvMoneyDescription.text = UIHelper.getCurrencyLongName(moneyShortName)
         holder.tvMoneyShortName.text = moneyShortName
 

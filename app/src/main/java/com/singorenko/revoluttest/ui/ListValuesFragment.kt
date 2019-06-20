@@ -20,6 +20,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_list_values.*
 import java.util.concurrent.TimeUnit
 
 class ListValuesFragment : Fragment() {
@@ -28,14 +29,11 @@ class ListValuesFragment : Fragment() {
     private var disposable: Disposable? = null
 
     private var recyclerViewState: Parcelable? = null
-
-    private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: RecyclerViewRatesAdapter
 
     private var disposableRequestData: Disposable? = null
 
     private lateinit var currencySelected : String
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list_values, container, false)
@@ -46,26 +44,22 @@ class ListValuesFragment : Fragment() {
 
         currencySelected = UIHelper.getPreferenceCurrency(context)
 
-        Log.d(TAG, "show exchange list")
-
-        recyclerView = view.findViewById<View>(R.id.rv_rate_list) as RecyclerView
         val layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = layoutManager
-
+        rv_rate_list.setHasFixedSize(true)
+        rv_rate_list.layoutManager = layoutManager
     }
 
     private fun fillRecyclerView() {
         recyclerViewAdapter = RecyclerViewRatesAdapter(listRateItems, context)
-        recyclerView.adapter = recyclerViewAdapter
+        rv_rate_list.adapter = recyclerViewAdapter
     }
 
     override fun onResume() {
         super.onResume()
         //Restore recyclerView State
-        (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
+        (rv_rate_list.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
 
-        disposableRequestData = Observable.interval(1, TimeUnit.SECONDS)
+        disposableRequestData = Observable.interval(Constants.PERIOD_UPDATE_FROM_SERVER, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(
                 AndroidSchedulers.mainThread()
@@ -74,7 +68,7 @@ class ListValuesFragment : Fragment() {
 
     private fun dataRequest() {
         //Save recyclerView State Position to avoid auto scroll up with each update from server
-        recyclerViewState = (recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()
+        recyclerViewState = (rv_rate_list.layoutManager as LinearLayoutManager).onSaveInstanceState()
 
         disposable = ApiUtils.getApiService().getRateList(Constants.usdShortName)
             .subscribeOn(Schedulers.io())
@@ -85,7 +79,7 @@ class ListValuesFragment : Fragment() {
                     listRateItems = UIHelper.fillListRareItems(result.rates)
 
                     //Restore recyclerView State
-                    (recyclerView.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
+                    (rv_rate_list.layoutManager as LinearLayoutManager).onRestoreInstanceState(recyclerViewState)
 
                     //Fill recyclerView when the data is received from server side
                     fillRecyclerView()
@@ -102,7 +96,7 @@ class ListValuesFragment : Fragment() {
         disposableRequestData?.dispose()
 
         //save recyclerViewState position
-        recyclerViewState = (recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()
+        recyclerViewState = (rv_rate_list.layoutManager as LinearLayoutManager).onSaveInstanceState()
     }
 
     companion object {

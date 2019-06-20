@@ -33,7 +33,7 @@ class RecyclerViewAdapter(private var listRateItems: MutableList<RateItem>?,
         val currency: Float = this.listRateItems?.get(position)?.currencyValue ?: 0.1F
         val moneyShortName : String = this.listRateItems?.get(position)?.currencyAbb ?: "EMPTY"
 
-        holder.tvCurrency.text = (currency * amount).toString()
+        holder.tvCurrency.text = String.format("%.2f", (currency * amount))
         holder.tvMoneyDescription.text = UIHelper.getCurrencyLongName(moneyShortName)
         holder.tvMoneyShortName.text = moneyShortName
 
@@ -45,7 +45,11 @@ class RecyclerViewAdapter(private var listRateItems: MutableList<RateItem>?,
 
     inner class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
 
-        override fun onClick(v: View?) { showDialogPreferencesSettings(adapterPosition, context) }
+        override fun onClick(v: View?) {
+            showDialogPreferencesSettings(adapterPosition,
+                context,
+                listRateItems?.get(adapterPosition)!!.currencyAbb
+            ) }
 
         val tvMoneyDescription: TextView = itemView.findViewById(R.id.tv_money_description)
         val tvMoneyShortName: TextView = itemView.findViewById(R.id.tv_money_short_name)
@@ -57,10 +61,10 @@ class RecyclerViewAdapter(private var listRateItems: MutableList<RateItem>?,
 
     interface ListItemClickListener{ fun onListItemClick(clickedItemIndex: Int) }
 
-    fun showDialogPreferencesSettings(adapterPosition: Int, context: Context?){
+    fun showDialogPreferencesSettings(adapterPosition: Int, context: Context?, currency: String){
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle("Currency Settings")
-        builder.setMessage("Set this currency as main?")
+        builder.setMessage("Set $currency as main?")
         builder.setPositiveButton("YES"){ _, _ ->
             mOnClickListener.onListItemClick(adapterPosition)
         }
